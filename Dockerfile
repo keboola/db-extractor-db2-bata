@@ -7,7 +7,8 @@ RUN apt-get update && apt-get install -y \
     ksh \
     zip \
     unzip \
-    unixodbc-dev
+    unixodbc-dev \
+    curl
 
 # Install PHP odbc extension
 RUN set -x \
@@ -33,10 +34,11 @@ RUN docker-php-ext-install pdo_odbc
 RUN export LD_LIBRARY_PATH=$IBM_DB_HOME/lib
 
 # Install Composer dependencies
-curl -sS https://getcomposer.org/installer | php
-RUN composer selfupdate
+ADD . /code
+WORKDIR /code
+RUN curl -sS https://getcomposer.org/installer | php
 RUN echo "memory_limit = -1" >> /etc/php.ini
-RUN composer install --no-interaction
+RUN php composer.phar install --no-interaction
 
 # Run app
 ENTRYPOINT php ./run.php --data=/data
