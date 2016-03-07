@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # install dependencies
-composer install -n;
+php composer.phar install -n;
 
 # run test suite
 export ROOT_PATH="/code";

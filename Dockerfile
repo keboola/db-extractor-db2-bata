@@ -33,6 +33,8 @@ RUN docker-php-ext-install pdo_odbc
 RUN export LD_LIBRARY_PATH=$IBM_DB_HOME/lib
 
 # Install Composer dependencies
+curl -sS https://getcomposer.org/installer | php
+RUN composer selfupdate
 RUN echo "memory_limit = -1" >> /etc/php.ini
 RUN composer install --no-interaction
 
