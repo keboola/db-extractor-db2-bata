@@ -12,6 +12,7 @@
 
     <php>
         <const name="ROOT_PATH" value="./"/>
+        <const name="APP_NAME" value="ex-db-db2"/>
     </php>
 
     <testsuite name="DB Extractor DB2 Test Suite">

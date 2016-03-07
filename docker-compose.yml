@@ -18,6 +18,5 @@ app:
 db2:
   image: quay.io/keboola/db2express-c-docker
   privileged: true
-  #entrypoint: tail -f /tmp/db2setup.log
   expose:
     - "50000"

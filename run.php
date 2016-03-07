@@ -19,6 +19,9 @@ try {
     $config = Yaml::parse(file_get_contents($arguments["data"] . "/config.yml"));
     $config['dataDir'] = $arguments['data'];
 
+    $config['driver'] = 'db2';
+    $config['extractor_class'] = 'DB2';
+
     $app = new Application($config);
     $app->run();
 
