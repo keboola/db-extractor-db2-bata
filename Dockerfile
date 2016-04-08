@@ -21,7 +21,9 @@ RUN set -x \
 # Install DB2 Client
 RUN mkdir -p /opt/ibm
 WORKDIR /opt/ibm
-ADD driver/ibm_data_server_driver_package_linuxx64_v10.5.tar.gz /opt/ibm/
+#ADD driver/ibm_data_server_driver_package_linuxx64_v10.5.tar.gz /opt/ibm/
+ADD driver/v10.5fp7_linuxx64_dsdriver.tar.gz /opt/ibm/
+
 RUN ksh dsdriver/installDSDriver
 ENV IBM_DB_HOME /opt/ibm/dsdriver
 
