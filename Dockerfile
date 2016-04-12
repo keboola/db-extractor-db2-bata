@@ -8,7 +8,8 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     unixodbc-dev \
-    curl
+    curl \
+    alien
 
 # Install PHP odbc extension
 RUN set -x \
@@ -19,21 +20,36 @@ RUN set -x \
     && docker-php-ext-install odbc
 
 # Install DB2 Client
+# RUN mkdir -p /opt/ibm
+# WORKDIR /opt/ibm
+# #ADD driver/ibm_data_server_driver_package_linuxx64_v10.5.tar.gz /opt/ibm/
+# ADD driver/v10.5fp7_linuxx64_dsdriver.tar.gz /opt/ibm/
+# RUN ksh dsdriver/installDSDriver
+# ENV IBM_DB_HOME /opt/ibm/dsdriver
+
+# Install IBM iAccessSeries app package
 RUN mkdir -p /opt/ibm
 WORKDIR /opt/ibm
-#ADD driver/ibm_data_server_driver_package_linuxx64_v10.5.tar.gz /opt/ibm/
-ADD driver/v10.5fp7_linuxx64_dsdriver.tar.gz /opt/ibm/
+ADD driver/iSeriesAccess-6.1.0-1.0.x86_64.rpm /opt/ibm/
+RUN alien /opt/ibm/iSeriesAccess-6.1.0-1.0.x86_64.rpm
+RUN dpkg -i iseriesaccess_6.1.0-2_amd64.deb
+RUN cp /opt/ibm/iSeriesAccess/lib64/* /usr/lib
+ADD driver/odbcinst.ini /etc/odbcinst.ini
 
-RUN ksh dsdriver/installDSDriver
-ENV IBM_DB_HOME /opt/ibm/dsdriver
+#ADD driver/odbc.ini /etc/odbc.ini
 
 # Install ibm_db2 and pdo_odbc PHP extensions
-RUN echo $IBM_DB_HOME | pecl install ibm_db2
-RUN docker-php-ext-enable ibm_db2
+# RUN echo $IBM_DB_HOME | pecl install ibm_db2
+# RUN docker-php-ext-enable ibm_db2
 RUN docker-php-ext-install odbc
-RUN docker-php-ext-configure pdo_odbc --with-pdo-odbc=ibm-db2,/opt/ibm/dsdriver
+# RUN docker-php-ext-configure pdo_odbc --with-pdo-odbc=ibm-db2,/opt/ibm/dsdriver
+RUN docker-php-ext-configure pdo_odbc --with-pdo-odbc=unixODBC,/usr
 RUN docker-php-ext-install pdo_odbc
-RUN export LD_LIBRARY_PATH=$IBM_DB_HOME/lib
+# RUN export LD_LIBRARY_PATH=$IBM_DB_HOME/lib
+
+RUN echo "/opt/ibm/iSeriesAccess/lib/" >> /etc/ld.so.conf.d/iSeriesAccess.conf
+RUN ldconfig
+RUN odbcinst -i -d -f /opt/ibm/iSeriesAccess/unixodbcregistration64
 
 # Install Composer dependencies
 ADD . /code
