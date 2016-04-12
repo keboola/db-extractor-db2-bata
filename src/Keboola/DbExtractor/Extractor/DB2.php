@@ -34,7 +34,7 @@ class DB2 extends Extractor
         $port = isset($dbParams['port']) ? $dbParams['port'] : '50000';
 
         $dsn = sprintf(
-            "odbc:DRIVER={IBM DB2 ODBC DRIVER};HOSTNAME=%s;PORT=%s;DATABASE=%s;PROTOCOL=TCPIP;",
+            "odbc:DRIVER={iSeries Access ODBC Driver 64-bit};HOSTNAME=%s;PORT=%s;DATABASE=%s;PROTOCOL=TCPIP;",
             $dbParams['host'],
             $port,
             $dbParams['database']
