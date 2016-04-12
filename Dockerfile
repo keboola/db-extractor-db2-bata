@@ -8,7 +8,8 @@ RUN apt-get update && apt-get install -y \
     unzip \
     unixodbc-dev \
     curl \
-    alien
+    alien \
+    libstdc++5
 
 # Install PHP odbc extension
 RUN set -x \
@@ -25,6 +26,7 @@ ADD driver/iSeriesAccess-5.4.0-1.6.x86_64.rpm /opt/ibm/
 RUN alien /opt/ibm/iSeriesAccess-5.4.0-1.6.x86_64.rpm
 RUN dpkg -i *.deb
 RUN cp /opt/ibm/iSeriesAccess/lib64/* /usr/lib
+RUN ln -s /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /usr/lib/x86_64-linux-gnu/libstdc++.so.5
 
 RUN echo "/opt/ibm/iSeriesAccess/lib64/" >> /etc/ld.so.conf.d/iSeriesAccess.conf
 RUN ldconfig
