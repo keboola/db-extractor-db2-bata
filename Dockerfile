@@ -21,9 +21,9 @@ RUN set -x \
 # Install IBM iAccessSeries app package
 RUN mkdir -p /opt/ibm
 WORKDIR /opt/ibm
-ADD driver/iSeriesAccess-6.1.0-1.0.x86_64.rpm /opt/ibm/
-RUN alien /opt/ibm/iSeriesAccess-6.1.0-1.0.x86_64.rpm
-RUN dpkg -i iseriesaccess_6.1.0-2_amd64.deb
+ADD driver/iSeriesAccess-5.4.0-1.6.x86_64.rpm /opt/ibm/
+RUN alien /opt/ibm/iSeriesAccess-5.4.0-1.6.x86_64.rpm
+RUN dpkg -i *.deb
 RUN cp /opt/ibm/iSeriesAccess/lib64/* /usr/lib
 
 RUN echo "/opt/ibm/iSeriesAccess/lib64/" >> /etc/ld.so.conf.d/iSeriesAccess.conf
