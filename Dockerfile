@@ -4,7 +4,6 @@ MAINTAINER Miro Cillik <miro@keboola.com>
 # Install dependencies
 RUN apt-get update && apt-get install -y \
     apt-utils \
-    ksh \
     zip \
     unzip \
     unixodbc-dev \
@@ -27,7 +26,7 @@ RUN alien /opt/ibm/iSeriesAccess-6.1.0-1.0.x86_64.rpm
 RUN dpkg -i iseriesaccess_6.1.0-2_amd64.deb
 RUN cp /opt/ibm/iSeriesAccess/lib64/* /usr/lib
 
-RUN echo "/opt/ibm/iSeriesAccess/lib/" >> /etc/ld.so.conf.d/iSeriesAccess.conf
+RUN echo "/opt/ibm/iSeriesAccess/lib64/" >> /etc/ld.so.conf.d/iSeriesAccess.conf
 RUN ldconfig
 RUN odbcinst -i -d -f /opt/ibm/iSeriesAccess/unixodbcregistration64
 
