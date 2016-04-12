@@ -17,7 +17,7 @@ RUN set -x \
     && phpize \
     && sed -ri 's@^ *test +"\$PHP_.*" *= *"no" *&& *PHP_.*=yes *$@#&@g' configure \
     && ./configure --with-unixODBC=shared,/usr \
-    && docker-php-ext-install odbc
+    && docker-php-ext-install odbc \
     && docker-php-ext-install pdo_odbc
 
 # Install IBM iAccessSeries app package
