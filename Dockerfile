@@ -7,9 +7,7 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     unixodbc-dev \
-    curl \
-    alien \
-    libstdc++5
+    curl
 
 # Install PHP odbc extension
 RUN set -x \
@@ -25,14 +23,13 @@ RUN docker-php-ext-install pdo_odbc
 # Install IBM iAccessSeries app package
 RUN mkdir -p /opt/ibm
 WORKDIR /opt/ibm
-ADD driver/iSeriesAccess-5.4.0-1.6.x86_64.rpm /opt/ibm/
-RUN alien /opt/ibm/iSeriesAccess-5.4.0-1.6.x86_64.rpm
+ADD driver/ibm-iaccess-1.1.0.5-1.0.amd64.deb /opt/ibm/
 RUN dpkg -i *.deb
 RUN cp /opt/ibm/iSeriesAccess/lib64/* /usr/lib
 
 RUN echo "/opt/ibm/iSeriesAccess/lib64/" >> /etc/ld.so.conf.d/iSeriesAccess.conf
 RUN ldconfig
-RUN odbcinst -i -d -f /opt/ibm/iSeriesAccess/unixodbcregistration64
+RUN odbcinst -i -d -f /opt/ibm/iSeriesAccess/unixodbcregistration
 
 # Install Composer dependencies
 ADD . /code
