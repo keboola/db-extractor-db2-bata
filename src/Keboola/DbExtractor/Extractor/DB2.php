@@ -31,12 +31,9 @@ class DB2 extends Extractor
             \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION
         ];
 
-        $port = isset($dbParams['port']) ? $dbParams['port'] : '50000';
-
         $dsn = sprintf(
-            "odbc:DRIVER={IBM i Access ODBC Driver 64-bit};HOSTNAME=%s;PORT=%s;DATABASE=%s;PROTOCOL=TCPIP;",
+            "odbc:DRIVER={IBM i Access ODBC Driver};SYSTEM=%s;DATABASE=%s;PROTOCOL=TCPIP;",
             $dbParams['host'],
-            $port,
             $dbParams['database']
         );
 
