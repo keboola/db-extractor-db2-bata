@@ -9,6 +9,7 @@
 
 namespace Keboola\DbExtractor;
 
+use Keboola\DbExtractor\Exception\UserException;
 use Keboola\DbExtractor\Test\ExtractorTest;
 
 class DB2Test extends ExtractorTest
@@ -99,5 +100,33 @@ class DB2Test extends ExtractorTest
         );
 
         return new \PDO($dsn, $user, $password);
+    }
+
+    public function testTestConnection()
+    {
+        $config = $this->getConfig();
+        $config['action'] = 'testConnection';
+        $app = new Application($config);
+
+        $result = $app->run();
+        $this->assertEquals('success', $result['status']);
+    }
+
+    public function testTestConnectionFailed()
+    {
+        $config = $this->getConfig();
+        $config['parameters']['db']['user'] = 'thisUserDoesNotExist';
+        $config['parameters']['db']['password'] = 'wrongPasswordObviously';
+        $config['action'] = 'testConnection';
+        $app = new Application($config);
+
+        $exception = null;
+        try {
+            $result = $app->run();
+        } catch(UserException $e) {
+            $exception = $e;
+        }
+
+        $this->assertContains('Connection failed', $exception->getMessage());
     }
 }
