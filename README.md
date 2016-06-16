@@ -1,5 +1,7 @@
-# DB2 DB Extractor
+# DB2 DB Extractor (for Bata)
 
+This is extractor is a fork of db-extractor-db2 using driver for connecting to server running on AS400 machine.
+Therefore there is no testing environment running. There is no dockerized AS400 DB2 server :(
 
 ## Example configuration
 
