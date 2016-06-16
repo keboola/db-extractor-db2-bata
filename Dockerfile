@@ -10,10 +10,6 @@ RUN apt-get update && apt-get install -y \
     unixodbc-dev \
     curl
 
-# Configure timezone and locale
-RUN echo "Europe/Prague" > /etc/timezone; dpkg-reconfigure -f noninteractive tzdata
-RUN export LANGUAGE=en_US.UTF-8; export LANG=en_US.UTF-8; export LC_ALL=en_US.UTF-8; locale-gen en_US.UTF-8; DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
-
 # Install PHP odbc extension
 RUN set -x \
     && cd /usr/src/php/ext/odbc \
@@ -42,6 +38,10 @@ WORKDIR /code
 RUN curl -sS https://getcomposer.org/installer | php
 RUN echo "memory_limit = -1" >> /etc/php.ini
 RUN php composer.phar install --no-interaction
+
+# Configure timezone and locale
+RUN echo "Europe/Prague" > /etc/timezone; dpkg-reconfigure -f noninteractive tzdata
+RUN export LANGUAGE=en_US.UTF-8; export LANG=en_US.UTF-8; export LC_ALL=en_US.UTF-8; locale-gen en_US.UTF-8; DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
 
 # Run app
 ENTRYPOINT php ./run.php --data=/data
