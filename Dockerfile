@@ -1,6 +1,10 @@
 FROM php:5.6-fpm
 MAINTAINER Miro Cillik <miro@keboola.com>
 
+# Configure timezone and locale
+RUN echo "Europe/Prague" > /etc/timezone; dpkg-reconfigure -f noninteractive tzdata
+RUN export LANGUAGE=en_US.UTF-8; export LANG=en_US.UTF-8; export LC_ALL=en_US.UTF-8; locale-gen en_US.UTF-8; DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
+
 # Install dependencies
 RUN apt-get update && apt-get install -y \
     apt-utils \
