@@ -41,7 +41,11 @@ RUN php composer.phar install --no-interaction
 
 # Configure timezone and locale
 RUN echo "Europe/Prague" > /etc/timezone; dpkg-reconfigure -f noninteractive tzdata
-RUN export LANGUAGE=en_US.UTF-8; export LANG=en_US.UTF-8; export LC_ALL=en_US.UTF-8; locale-gen en_US.UTF-8; DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
+RUN echo "LANG=en_US.UTF-8\nLC_ALL=en_US.UTF-8" > /etc/default/locale
+RUN export LANGUAGE=en_US.UTF-8; export LANG=en_US.UTF-8; export LC_ALL=en_US.UTF-8
+RUN locale-gen "en_US.UTF-8"
+RUN DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
+RUN export DB2CODEPAGE=1208
 
 # Run app
 ENTRYPOINT php ./run.php --data=/data
