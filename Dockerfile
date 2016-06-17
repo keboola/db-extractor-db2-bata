@@ -13,15 +13,14 @@ RUN apt-get update && apt-get install -y \
 # Configure timezone and locale
 RUN echo "Europe/Prague" > /etc/timezone && \
     dpkg-reconfigure -f noninteractive tzdata && \
-    sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
-    echo "LANG=en_US.UTF-8\nLC_ALL=en_US.UTF-8" > /etc/default/locale && \
-    locale-gen en_US.UTF-8 && \
+    sed -i -e 's/# en_US ISO-8859-1 ISO-8859-1/en_US ISO-8859-1 ISO-8859-1/' /etc/locale.gen && \
+    echo "LANG=en_US.ISO-8859-1\nLC_ALL=en_US.ISO-8859-1" > /etc/default/locale && \
+    locale-gen en_US.ISO-8859-1 && \
     dpkg-reconfigure -f noninteractive locales
 
-ENV LANG en_US.UTF-8
+ENV LANG en_US.ISO-8859-1
 ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
-ENV DB2CODEPAGE=1208
+ENV LC_ALL en_US.ISO-8859-1
 
 # Install PHP odbc extension
 RUN set -x \
