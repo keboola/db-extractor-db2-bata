@@ -70,12 +70,12 @@ class DB2 extends Extractor
             $resultRow = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if (is_array($resultRow) && !empty($resultRow)) {
-                $csv->writeRow(array_keys($resultRow));
-                $csv->writeRow($resultRow);
+                $csv->writeRow($this->encode(array_keys($resultRow)));
+                $csv->writeRow($this->encode($resultRow));
 
                 // write the rest
                 while ($resultRow = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-                    $csv->writeRow($resultRow);
+                    $csv->writeRow($this->encode($resultRow));
                 }
             } else {
                 $this->logger->warning("Query returned empty result. Nothing was imported.");
@@ -91,6 +91,13 @@ class DB2 extends Extractor
         }
 
         return $outputTable;
+    }
+
+    private function encode($row)
+    {
+        return array_map(function ($item) {
+            return utf8_encode($item);
+        }, $row);
     }
 
     private function replaceNull($row, $value)

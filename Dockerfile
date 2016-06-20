@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
 # Configure timezone and locale
 RUN echo "Europe/Prague" > /etc/timezone && \
     dpkg-reconfigure -f noninteractive tzdata && \
-    sed -i -e 's/# en_US ISO-8859-1 ISO-8859-1/en_US ISO-8859-1 ISO-8859-1/' /etc/locale.gen && \
+    sed -i -e 's/# en_US ISO-8859-1/en_US ISO-8859-1/' /etc/locale.gen && \
     echo "LANG=en_US.ISO-8859-1\nLC_ALL=en_US.ISO-8859-1" > /etc/default/locale && \
     locale-gen en_US.ISO-8859-1 && \
     dpkg-reconfigure -f noninteractive locales
