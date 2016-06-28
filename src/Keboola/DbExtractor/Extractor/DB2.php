@@ -96,6 +96,9 @@ class DB2 extends Extractor
     private function encode($row)
     {
         return array_map(function ($item) {
+            if (is_numeric($item)) {
+                return $item;
+            }
             return utf8_encode($item);
         }, $row);
     }
