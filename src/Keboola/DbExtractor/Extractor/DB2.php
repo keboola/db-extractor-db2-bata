@@ -77,17 +77,17 @@ class DB2 extends Extractor
                 while ($resultRow = $stmt->fetch(\PDO::FETCH_ASSOC)) {
                     $csv->writeRow($this->encode($resultRow));
                 }
+
+                if ($this->createManifest($table) === false) {
+                    throw new ApplicationException("Unable to create manifest", 0, null, [
+                        'table' => $table
+                    ]);
+                }
             } else {
                 $this->logger->warning("Query returned empty result. Nothing was imported.");
             }
         } catch (\PDOException $e) {
             throw new UserException("DB query failed: " . $e->getMessage(), 0, $e);
-        }
-
-        if ($this->createManifest($table) === false) {
-            throw new ApplicationException("Unable to create manifest", 0, null, [
-                'table' => $table
-            ]);
         }
 
         return $outputTable;
@@ -99,7 +99,7 @@ class DB2 extends Extractor
             if (is_numeric($item)) {
                 return $item;
             }
-            return utf8_encode($item);
+            return mb_convert_encoding($item, 'UTF-8', 'ISO-8859-1');
         }, $row);
     }
 
