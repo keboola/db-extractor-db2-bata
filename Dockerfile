@@ -23,13 +23,15 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.ISO-8859-1
 
 # Install PHP odbc extension
-RUN set -x \
-    && cd /usr/src/php/ext/odbc \
-    && phpize \
-    && sed -ri 's@^ *test +"\$PHP_.*" *= *"no" *&& *PHP_.*=yes *$@#&@g' configure \
-    && ./configure --with-unixODBC=shared,/usr \
-    && docker-php-ext-install odbc
+#RUN set -x \
+#    && cd /usr/src/php/ext/odbc \
+#    && phpize \
+#    && sed -ri 's@^ *test +"\$PHP_.*" *= *"no" *&& *PHP_.*=yes *$@#&@g' configure \
+#    && ./configure --with-unixODBC=shared,/usr \
+#    && docker-php-ext-install odbc
 
+RUN docker-php-ext-configure --with-unixODBC=shared,/usr
+RUN docker-php-ext-install odbc
 RUN docker-php-ext-configure pdo_odbc --with-pdo-odbc=unixODBC,/usr
 RUN docker-php-ext-install pdo_odbc
 
