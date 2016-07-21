@@ -30,7 +30,7 @@ ENV LC_ALL en_US.ISO-8859-1
 #    && ./configure --with-unixODBC=shared,/usr \
 #    && docker-php-ext-install odbc
 
-RUN docker-php-ext-configure --with-unixODBC=shared,/usr
+RUN docker-php-ext-configure odbc --with-unixODBC=shared,/usr
 RUN docker-php-ext-install odbc
 RUN docker-php-ext-configure pdo_odbc --with-pdo-odbc=unixODBC,/usr
 RUN docker-php-ext-install pdo_odbc
