@@ -26,16 +26,18 @@ ENV LC_ALL en_US.ISO-8859-1
 
 # Install PHP odbc extension
 RUN set -x \
+    && docker-php-source extract \
     && cd /usr/src/php/ext/odbc \
     && phpize \
     && sed -ri 's@^ *test +"\$PHP_.*" *= *"no" *&& *PHP_.*=yes *$@#&@g' configure \
     && ./configure --with-unixODBC=shared,/usr \
-    && docker-php-ext-install odbc
+    && docker-php-ext-install odbc \
+    && docker-php-source delete
 
 RUN docker-php-ext-configure pdo_odbc --with-pdo-odbc=unixODBC,/usr
 RUN docker-php-ext-install pdo_odbc
 
-# Install IBM iAccessSeries app package
+## Install IBM iAccessSeries app package
 RUN mkdir -p /opt/ibm
 WORKDIR /opt/ibm
 ADD driver/ibm-iaccess-1.1.0.5-1.0.amd64.deb /opt/ibm/
@@ -46,7 +48,7 @@ RUN echo "/opt/ibm/iSeriesAccess/lib64/" >> /etc/ld.so.conf.d/iSeriesAccess.conf
 RUN ldconfig
 RUN odbcinst -i -d -f /opt/ibm/iSeriesAccess/unixodbcregistration
 
-# Install Composer dependencies
+## Install Composer dependencies
 ADD . /code
 WORKDIR /code
 RUN curl -sS https://getcomposer.org/installer | php
@@ -54,4 +56,4 @@ RUN echo "memory_limit = -1" >> /etc/php.ini
 RUN php composer.phar install --no-interaction
 
 # Run app
-ENTRYPOINT php ./run.php --data=/data
+CMD php ./run.php --data=/data

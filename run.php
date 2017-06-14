@@ -1,6 +1,7 @@
 <?php
 
 use Keboola\DbExtractor\Application;
+use Keboola\DbExtractor\Configuration\DB2ConfigDefinition;
 use Keboola\DbExtractor\Exception\ApplicationException;
 use Keboola\DbExtractor\Exception\UserException;
 use Symfony\Component\Yaml\Yaml;
@@ -21,6 +22,8 @@ try {
     $config['parameters']['extractor_class'] = 'DB2';
 
     $app = new Application($config);
+    $app->setConfigDefinition(new DB2ConfigDefinition());
+
     echo json_encode($app->run());
 } catch(UserException $e) {
     $app['logger']->log('error', $e->getMessage(), (array) $e->getData());
@@ -31,8 +34,7 @@ try {
 } catch(\Exception $e) {
     $app['logger']->log('error', $e->getMessage(), [
         'errFile' => $e->getFile(),
-        'errLine' => $e->getLine(),
-        'trace' => $e->getTrace()
+        'errLine' => $e->getLine()
     ]);
     exit(2);
 }

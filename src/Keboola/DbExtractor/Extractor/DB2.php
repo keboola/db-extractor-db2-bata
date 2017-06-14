@@ -74,8 +74,9 @@ class DB2 extends Extractor
                 $csv->writeRow($this->encode($resultRow));
 
                 // write the rest
+                $convert = isset($table['convert']) ? $table['convert'] : true;
                 while ($resultRow = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-                    $csv->writeRow($this->encode($resultRow));
+                    $csv->writeRow($this->encode($resultRow, $convert));
                 }
 
                 if ($this->createManifest($table) === false) {
@@ -93,13 +94,13 @@ class DB2 extends Extractor
         return $outputTable;
     }
 
-    private function encode($row)
+    private function encode($row, $convert = true)
     {
-        return array_map(function ($item) {
+        return array_map(function ($item) use ($convert) {
             if (is_numeric($item)) {
                 return $item;
             }
-            return mb_convert_encoding($item, 'UTF-8', 'ISO-8859-1');
+            return $convert ? mb_convert_encoding($item, 'UTF-8', 'ISO-8859-1') : $item;
         }, $row);
     }
 
