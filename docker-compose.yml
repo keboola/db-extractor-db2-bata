@@ -1,11 +1,15 @@
-app:
-  build: .
-  volumes:
+version: "2"
+services:
+  app:
+    build: .
+    image: keboola/db-extractor-db2-bata
+    volumes:
       - .:/code
-  working_dir: /code
-  command: "./phpunit.sh"
-  tty: true
-  stdin_open: true
+    working_dir: /code
+    command: "./phpunit.sh"
+    tty: true
+    stdin_open: true
+
 #  environment:
 #    - DB2_DB_HOST=db2
 #    - DB2_DB_PORT=50000
