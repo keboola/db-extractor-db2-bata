@@ -59,6 +59,7 @@ class DB2 extends Extractor
             throw new UserException("Missing attribute 'query'");
         }
         $query = $table['query'];
+        $encoding = isset($table['encoding']) ? $table['encoding'] : null;
 
         $this->logger->info("Exporting to " . $outputTable);
         $csv = $this->createOutputCsv($outputTable);
@@ -70,13 +71,15 @@ class DB2 extends Extractor
             $resultRow = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if (is_array($resultRow) && !empty($resultRow)) {
-                $csv->writeRow($this->encode(array_keys($resultRow)));
-                $csv->writeRow($this->encode($resultRow));
+                $csv->writeRow($this->encode(array_keys($resultRow), $encoding));
+                $csv->writeRow($this->encode($resultRow, $encoding));
 
                 // write the rest
-                $convert = isset($table['convert']) ? $table['convert'] : true;
                 while ($resultRow = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-                    $csv->writeRow($this->encode($resultRow, $convert));
+                    if ($encoding !== null) {
+                        $resultRow = $this->encode($resultRow, $encoding);
+                    }
+                    $csv->writeRow($resultRow);
                 }
 
                 if ($this->createManifest($table) === false) {
@@ -94,13 +97,13 @@ class DB2 extends Extractor
         return $outputTable;
     }
 
-    private function encode($row, $convert = true)
+    private function encode($row, $encoding)
     {
-        return array_map(function ($item) use ($convert) {
+        return array_map(function ($item) use ($encoding) {
             if (is_numeric($item)) {
                 return $item;
             }
-            return $convert ? mb_convert_encoding($item, 'UTF-8', 'ISO-8859-1') : $item;
+            return ($encoding === null) ? $item : mb_convert_encoding($item, $encoding['to'], $encoding['from']);
         }, $row);
     }
 
