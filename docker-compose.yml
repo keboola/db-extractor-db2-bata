@@ -1,6 +1,6 @@
 version: "2"
 services:
-  app:
+  app: &base
     build: .
     image: keboola/db-extractor-db2-bata
     volumes:
@@ -9,6 +9,11 @@ services:
     command: "./phpunit.sh"
     tty: true
     stdin_open: true
+
+  dev:
+    <<: *base
+    volumes:
+      - .:/code
 
 #  environment:
 #    - DB2_DB_HOST=db2
