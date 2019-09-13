@@ -7,7 +7,6 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="true"
-         syntaxCheck="false"
          bootstrap="vendor/keboola/db-extractor-common/bootstrap.php">
 
     <php>

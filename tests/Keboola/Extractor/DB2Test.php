@@ -11,21 +11,32 @@ namespace Keboola\DbExtractor;
 
 use Keboola\DbExtractor\Exception\UserException;
 use Keboola\DbExtractor\Test\ExtractorTest;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Yaml\Yaml;
 
-class DB2Test extends ExtractorTest
+class DB2Test extends TestCase
 {
     /** @var Application */
     protected $app;
 
-    public function setUp()
+    protected $dataDir = ROOT_PATH . "/tests/data";
+
+    public function setUp(): void
     {
         $this->app = new Application($this->getConfig());
     }
 
     public function getConfig($driver = 'db2')
     {
-        $config = parent::getConfig('db2');
-        $config['extractor_class'] = 'DB2';
+        $config = Yaml::parse(file_get_contents($this->dataDir . '/' .$driver . '/config.yml'));
+        $config['parameters']['data_dir'] = $this->dataDir;
+
+        $config['parameters']['db']['user'] = $this->getEnv($driver, 'DB_USER', true);
+        $config['parameters']['db']['#password'] = $this->getEnv($driver, 'DB_PASSWORD', true);
+        $config['parameters']['db']['host'] = $this->getEnv($driver, 'DB_HOST');
+        $config['parameters']['db']['port'] = $this->getEnv($driver, 'DB_PORT');
+        $config['parameters']['db']['database'] = $this->getEnv($driver, 'DB_DATABASE');
+        $config['parameters']['extractor_class'] = 'DB2';
         return $config;
     }
 
@@ -128,5 +139,16 @@ class DB2Test extends ExtractorTest
         }
 
         $this->assertContains('Connection failed', $exception->getMessage());
+    }
+
+    protected function getEnv($driver, $suffix, $required = false)
+    {
+        $env = strtoupper($driver) . '_' . $suffix;
+        if ($required) {
+            if (false === getenv($env)) {
+                throw new \Exception($env . " environment variable must be set.");
+            }
+        }
+        return getenv($env);
     }
 }
