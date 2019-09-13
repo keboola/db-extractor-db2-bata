@@ -21,7 +21,7 @@
         }
     },
     "scripts": {
-        "tests": "./wait-for-it.sh db2:50000 -t 30 -- ./vendor/bin/phpunit",
+        "tests": "./wait-for-it.sh db2:50000 -t 120 -- ./vendor/bin/phpunit",
         "build": [
             "@tests"
         ],
