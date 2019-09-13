@@ -5,6 +5,7 @@ services:
 
 script:
   - docker-compose build app
+  - docker-composer run --rm app composer ci
 
 after_success:
   - docker images
