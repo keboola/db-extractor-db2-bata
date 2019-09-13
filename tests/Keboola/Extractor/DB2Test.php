@@ -138,7 +138,7 @@ class DB2Test extends TestCase
             $exception = $e;
         }
 
-        $this->assertContains('Connection failed', $exception->getMessage());
+        $this->assertStringContainsString('Connection failed', $exception->getMessage());
     }
 
     protected function getEnv($driver, $suffix, $required = false)
