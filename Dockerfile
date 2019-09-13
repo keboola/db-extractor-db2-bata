@@ -51,9 +51,12 @@ RUN odbcinst -i -d -f /opt/ibm/iSeriesAccess/unixodbcregistration
 ## Install Composer dependencies
 ADD . /code
 WORKDIR /code
-RUN curl -sS https://getcomposer.org/installer | php
+RUN curl -sS https://getcomposer.org/installer | php \
+  && mv composer.phar /usr/local/bin/composer
+
 RUN echo "memory_limit = -1" >> /etc/php.ini
-RUN php composer.phar install --no-interaction
+
+RUN composer install --no-interaction
 
 # Run app
 CMD php ./run.php --data=/data
