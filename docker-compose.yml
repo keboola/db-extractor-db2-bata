@@ -3,19 +3,10 @@ services:
   app: &base
     build: .
     image: keboola/db-extractor-db2-bata
-    volumes:
-      - .:/code
     working_dir: /code
-    command: "./phpunit.sh"
+    command: composer ci
     tty: true
     stdin_open: true
-    links:
-      - db2
-
-  dev:
-    <<: *base
-    volumes:
-      - .:/code
     environment:
       - DB2_DB_HOST=db2
       - DB2_DB_PORT=50000
@@ -24,6 +15,12 @@ services:
       - DB2_DB_PASSWORD=db2inst1
     links:
       - db2
+
+  dev:
+    <<: *base
+    image: keboola/db-extractor-db2-bata-dev
+    volumes:
+      - .:/code
 
   db2:
     image: quay.io/keboola/db2express-c-docker

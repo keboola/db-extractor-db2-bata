@@ -4,8 +4,8 @@ services:
   - docker
 
 script:
-  - docker-compose build app
-  - docker-compose run --rm app composer ci
+  - docker-compose build
+  - docker-compose run --rm app
 
 after_success:
   - docker images
