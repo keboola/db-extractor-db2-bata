@@ -1,4 +1,4 @@
-FROM php:5.6-fpm
+FROM php:7.3-cli-stretch
 MAINTAINER Miro Cillik <miro@keboola.com>
 
 # Install dependencies
