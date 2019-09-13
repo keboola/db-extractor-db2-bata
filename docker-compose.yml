@@ -9,6 +9,8 @@ services:
     command: "./phpunit.sh"
     tty: true
     stdin_open: true
+    links:
+      - db2
 
   dev:
     <<: *base
