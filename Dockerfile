@@ -8,7 +8,8 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     unixodbc-dev \
-    curl
+    curl \
+    ssh
 
 RUN rm -rf /var/lib/apt/lists/*
 
