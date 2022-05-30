@@ -34,3 +34,7 @@ Therefore there is no testing environment running. There is no dockerized AS400 
         }
       ]
     }
+
+## License
+
+MIT licensed, see [LICENSE](./LICENSE) file.
