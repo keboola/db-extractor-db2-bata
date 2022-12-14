@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "54cddbed89018b207aa8167cbaee9866",
+    "content-hash": "e896f039671953029119e5f80adee7ee",
     "packages": [
         {
             "name": "keboola/csv",
@@ -1571,6 +1571,9 @@
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
-    "platform-dev": []
+    "platform": {
+        "ext-json": "^1.2"
+    },
+    "platform-dev": [],
+    "plugin-api-version": "2.2.0"
 }
