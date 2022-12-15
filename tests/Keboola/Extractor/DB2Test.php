@@ -22,10 +22,18 @@ class DB2Test extends ExtractorTest
         $this->app = new Application($this->getConfig());
     }
 
-    public function getConfig($driver = 'db2')
+    protected function getConfig($driver = 'db2')
     {
-        $config = parent::getConfig('db2');
-        $config['extractor_class'] = 'DB2';
+        $config = json_decode(file_get_contents($this->dataDir . '/' .$driver . '/config.json'), true);
+        $config['parameters']['data_dir'] = $this->dataDir;
+        $config['parameters']['extractor_class'] = 'DB2';
+
+        $config['parameters']['db']['user'] = $this->getEnv($driver, 'DB_USER', true);
+        $config['parameters']['db']['#password'] = $this->getEnv($driver, 'DB_PASSWORD', true);
+        $config['parameters']['db']['host'] = $this->getEnv($driver, 'DB_HOST');
+        $config['parameters']['db']['port'] = $this->getEnv($driver, 'DB_PORT');
+        $config['parameters']['db']['database'] = $this->getEnv($driver, 'DB_DATABASE');
+
         return $config;
     }
 
