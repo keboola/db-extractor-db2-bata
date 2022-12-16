@@ -122,4 +122,20 @@ class DB2 extends Extractor
     {
         $this->db->query('SELECT 1 FROM sysibm.sysdummy1');
     }
+
+    protected function createManifest($table)
+    {
+        $outFilename = $this->dataDir . '/out/tables/' . $table['outputTable'] . '.csv.manifest';
+
+        $manifestData = [
+            'destination' => $table['outputTable'],
+            'incremental' => $table['incremental']
+        ];
+
+        if (!empty($table['primaryKey'])) {
+            $manifestData['primary_key'] = $table['primaryKey'];
+        }
+
+        return file_put_contents($outFilename, json_encode($manifestData));
+    }
 }
