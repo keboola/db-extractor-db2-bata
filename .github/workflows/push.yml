@@ -8,6 +8,7 @@ env:
   # Developer portal login
   KBC_DEVELOPERPORTAL_VENDOR: "keboola"
   KBC_DEVELOPERPORTAL_APP: "keboola.ex-db-db2-bata"
+  KBC_DEVELOPERPORTAL_APP_AS400: "keboola.ex-db-db2-as400"
   KBC_DEVELOPERPORTAL_USERNAME: "keboola+ex_db_db2_bata_github_actions"
   KBC_DEVELOPERPORTAL_PASSWORD: ${{ secrets.KBC_DEVELOPERPORTAL_PASSWORD }}
 
@@ -60,6 +61,17 @@ jobs:
           push_latest: ${{ steps.tag.outputs.is_semantic_tag }}
           source_image: ${{ env.APP_IMAGE}}
 
+      - name: Push image to ECR (AS400)
+        uses: keboola/action-push-to-ecr@master
+        with:
+          vendor: ${{ env.KBC_DEVELOPERPORTAL_VENDOR }}
+          app_id: ${{ env.KBC_DEVELOPERPORTAL_APP_AS400 }}
+          username: ${{ env.KBC_DEVELOPERPORTAL_USERNAME }}
+          password: ${{ env.KBC_DEVELOPERPORTAL_PASSWORD }}
+          tag: ${{ steps.tag.outputs.app_image_tag }}
+          push_latest: ${{ steps.tag.outputs.is_semantic_tag }}
+          source_image: ${{ env.APP_IMAGE}}
+
   deploy:
     needs:
       - build
@@ -72,6 +84,15 @@ jobs:
         with:
           vendor: ${{ env.KBC_DEVELOPERPORTAL_VENDOR }}
           app_id: ${{ env.KBC_DEVELOPERPORTAL_APP }}
+          username: ${{ env.KBC_DEVELOPERPORTAL_USERNAME }}
+          password: ${{ env.KBC_DEVELOPERPORTAL_PASSWORD }}
+          tag: ${{ needs.build.outputs.app_image_tag }}
+
+      - name: Set tag in the Deloper Portal (AS400)
+        uses: keboola/action-set-tag-developer-portal@master
+        with:
+          vendor: ${{ env.KBC_DEVELOPERPORTAL_VENDOR }}
+          app_id: ${{ env.KBC_DEVELOPERPORTAL_APP_AS400 }}
           username: ${{ env.KBC_DEVELOPERPORTAL_USERNAME }}
           password: ${{ env.KBC_DEVELOPERPORTAL_PASSWORD }}
           tag: ${{ needs.build.outputs.app_image_tag }}
